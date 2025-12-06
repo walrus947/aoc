@@ -1,8 +1,16 @@
 package main
 
-import "github.com/walrus947/aoc/_2025/solutions"
+import (
+	"log"
+
+	"github.com/walrus947/aoc/_2025/solutions"
+)
 
 func main() {
+	log.Println("-----Day 1-----")
 	solutions.Day1()
+	log.Println("-----Day 2-----")
 	solutions.Day2()
+	log.Println("-----Day 3-----")
+	solutions.Day3()
 }
