@@ -15,4 +15,6 @@ func main() {
 	solutions.Day3()
 	log.Println("-----Day 4-----")
 	solutions.Day4()
+	log.Println("-----Day 5-----")
+	solutions.Day5()
 }
