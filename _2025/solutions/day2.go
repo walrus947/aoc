@@ -36,28 +36,31 @@ func Day2() {
 
 func part1_isValidId_NIEVE(id string) bool {
 	// since an invalid id only repeats twice, any invalid id with an odd number of digits is valid
-	if len(id) % 2 != 0 {
+	if len(id)%2 != 0 {
 		return true
 	}
 
-	leftIdx := 0; rightIdx := len(id) / 2 
+	leftIdx := 0
+	rightIdx := len(id) / 2
 	// while this is nice, it's about 10ms slower than the dumb for loop
 	// return id[:midpoint] == id[midpoint:]
 
 	// since all odd digit-ed ids have been filtered, we only need to check one bound
-	for ; rightIdx < len(id); leftIdx, rightIdx = leftIdx + 1, rightIdx + 1 {
+	for ; rightIdx < len(id); leftIdx, rightIdx = leftIdx+1, rightIdx+1 {
 		if id[leftIdx] != id[rightIdx] {
-			return true 
+			return true
 		}
 	}
 
-	return false 
+	return false
 }
 
 func part2_isValidId_NIEVE(id string) bool {
 	for substrSize := 1; substrSize <= len(id)/2; substrSize++ {
-		if isSubstrRepeated(id, substrSize) { return false }
-	}	
+		if isSubstrRepeated(id, substrSize) {
+			return false
+		}
+	}
 
 	return true
 }
@@ -66,7 +69,7 @@ func isSubstrRepeated(id string, substrSize int) bool {
 	substr := id[:substrSize]
 
 	for startChunk := substrSize; startChunk < len(id); startChunk += substrSize {
-		endChunk := int(math.Min(float64(startChunk) + float64(substrSize), float64(len(id))))
+		endChunk := int(math.Min(float64(startChunk)+float64(substrSize), float64(len(id))))
 
 		if id[startChunk:endChunk] != substr {
 			return false
@@ -77,7 +80,7 @@ func isSubstrRepeated(id string, substrSize int) bool {
 }
 
 // since this is aoc, we're going to assume the input is well-formatted
-func day2_SolveNieve(line string) (int, int){
+func day2_SolveNieve(line string) (int, int) {
 	stop := utils.Timer("day2_nieve")
 	defer stop()
 
@@ -89,12 +92,16 @@ func day2_SolveNieve(line string) (int, int){
 	for _, r := range ranges {
 		for idAsInt := r.Start; idAsInt <= r.End; idAsInt++ {
 			id := strconv.Itoa(int(idAsInt))
-			if !part1_isValidId_NIEVE(id) { invalidIdsPart1 += int(idAsInt) }
-			if !part2_isValidId_NIEVE(id) { invalidIdsPart2 += int(idAsInt) }
+			if !part1_isValidId_NIEVE(id) {
+				invalidIdsPart1 += int(idAsInt)
+			}
+			if !part2_isValidId_NIEVE(id) {
+				invalidIdsPart2 += int(idAsInt)
+			}
 		}
 	}
 
-	return invalidIdsPart1, invalidIdsPart2 
+	return invalidIdsPart1, invalidIdsPart2
 }
 
 func day2_parseRanges(line string) []Range {
@@ -113,12 +120,11 @@ func day2_parseRanges(line string) []Range {
 			log.Fatalf("error: %s\n", err2.Error())
 			return nil
 		}
-		ranges = append(ranges, Range{ Start: start, End: end })
+		ranges = append(ranges, Range{Start: start, End: end})
 	}
 
 	return ranges
 }
-
 
 // thought: the nieve solution goes over all ranges, so it's super slow at SUM(N_range_size * time_per_check) ~= O(N_range_size)
 // which is linear to the range size, which sucks
@@ -136,16 +142,15 @@ func day2_parseRanges(line string) []Range {
 
 // this gives us some working function s.t. we can build any invalid ID as SS where S is a substring of length L / 2
 
-// reality: 
+// reality:
 // the problem with this approach is that it assumes that the space of all ranges is significantly large s.t. the
 // computation of all invalid subsequences is worth the squeeze
 // for this input, it's not worth it at all. the nieve solution that goes over all ranges takes ~50ms while the
 // "optimized" solution takes ~17s
 
-
 type Range struct {
 	Start int64
-	End int64
+	End   int64
 }
 
 func part1_SolveWithSubsequences(line string) int64 {
@@ -169,7 +174,7 @@ func part1_SolveWithSubsequences(line string) int64 {
 
 			for _, r := range ranges {
 				if SS >= r.Start && SS <= r.End {
-					totalSum += SS 
+					totalSum += SS
 				}
 			}
 		}

@@ -11,7 +11,7 @@ import (
 
 const (
 	MULT = "*"
-	ADD = "+" 
+	ADD  = "+"
 )
 
 var (
@@ -55,10 +55,10 @@ func day6_SolvePart1(lines []string) int {
 	stop := utils.Timer("part1")
 	defer stop()
 
-	lines = lines[:len(lines) - 1]
-	
-	operands := getOperands(lines[:len(lines) - 1])
-	operators := getOperators(lines[len(lines) - 1])
+	lines = lines[:len(lines)-1]
+
+	operands := getOperands(lines[:len(lines)-1])
+	operators := getOperators(lines[len(lines)-1])
 
 	return doOperations(operands, operators)
 }
@@ -67,10 +67,10 @@ func day6_SolvePart2(lines []string) int {
 	stop := utils.Timer("part2")
 	defer stop()
 
-	lines = lines[:len(lines) - 1]
-	
-	operands := getOperandsForSquids(lines[:len(lines) - 1])
-	operators := getOperators(lines[len(lines) - 1])
+	lines = lines[:len(lines)-1]
+
+	operands := getOperandsForSquids(lines[:len(lines)-1])
+	operators := getOperators(lines[len(lines)-1])
 
 	return doOperationsPart2(operands, operators)
 }
@@ -116,7 +116,7 @@ func getOperandsForSquids(lines []string) []Operands {
 			}
 		}
 
-		if isColDivider { 
+		if isColDivider {
 			operands = append(operands, parseSquidInts(input, startIdx, col))
 			startIdx = col + 1
 		}
@@ -144,7 +144,7 @@ func parseSquidInts(input [][]rune, startIdx int, divider int) Operands {
 			}
 
 			chAsInt, _ := strconv.Atoi(string(ch))
-			val = val * 10 + chAsInt	
+			val = val*10 + chAsInt
 		}
 
 		op.ops = append(op.ops, val)
@@ -153,8 +153,8 @@ func parseSquidInts(input [][]rune, startIdx int, divider int) Operands {
 	return op
 }
 
-func getOperators(line string) []func(... int) int {
-	operands := []func(... int) int {}
+func getOperators(line string) []func(...int) int {
+	operands := []func(...int) int{}
 	for op := range strings.FieldsSeq(line) {
 		if op == MULT {
 			operands = append(operands, MULT_FUNC)
@@ -166,7 +166,7 @@ func getOperators(line string) []func(... int) int {
 	return operands
 }
 
-func doOperations(operands [][]int, operators []func(... int) int) int {
+func doOperations(operands [][]int, operators []func(...int) int) int {
 	var result int
 
 	for col, _ := range operands[0] {
@@ -178,15 +178,15 @@ func doOperations(operands [][]int, operators []func(... int) int) int {
 		result += operators[col](ops...)
 	}
 
-	return result 
+	return result
 }
 
-func doOperationsPart2(operands []Operands, operators []func(... int) int) int {
+func doOperationsPart2(operands []Operands, operators []func(...int) int) int {
 	var result int
 
 	for col, op := range operands {
 		result += operators[col](op.ops...)
 	}
 
-	return result 
+	return result
 }

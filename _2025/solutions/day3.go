@@ -26,7 +26,7 @@ func Day3() {
 
 func part1_FindLargestJoltage(line string) int {
 	var tens, ones int
-	for idx := 0; idx < len(line) - 1; idx++ {
+	for idx := 0; idx < len(line)-1; idx++ {
 		currentDigit := int(line[idx] - '0')
 		if tens < currentDigit {
 			tens = currentDigit
@@ -40,11 +40,11 @@ func part1_FindLargestJoltage(line string) int {
 		}
 	}
 
-	// if we've broken out of the loop, then tens has been assigned, 
+	// if we've broken out of the loop, then tens has been assigned,
 	// but ones has not, so ones = max(ones, len(line) - 1)
-	ones = int(math.Max(float64(ones), float64(int(line[len(line) - 1] - '0'))))
+	ones = int(math.Max(float64(ones), float64(int(line[len(line)-1]-'0'))))
 
-	return tens * 10 + ones
+	return tens*10 + ones
 }
 
 func part2_FindLargestJoltage(line string) int {
@@ -53,31 +53,31 @@ func part2_FindLargestJoltage(line string) int {
 	for idx, ch := range line {
 		for len(result) > 0 {
 			d_prev := result[len(result)-1]
-			
+
 			isGreedy := ch > d_prev
-			
-			// we can only drop if we have enough characters still to parse to 
+
+			// we can only drop if we have enough characters still to parse to
 			// make a value with 12 digits
-			isAbleToDrop := (len(result)) + (len(line) - (idx + 1)) >= 12
+			isAbleToDrop := (len(result))+(len(line)-(idx+1)) >= 12
 
 			if !isAbleToDrop {
 				finalChars := line[idx:]
 				result = append(result, []rune(finalChars)...)
 				goto final_conversion
 			}
-			
+
 			if isGreedy && isAbleToDrop {
 				result = result[:len(result)-1] // Pop
 			} else {
-				// Stop dropping if the current digit isn't better OR if dropping 
+				// Stop dropping if the current digit isn't better OR if dropping
 				// would make the final result too short.
-				break 
+				break
 			}
 		}
 
 		result = append(result, ch)
 	}
-	
+
 final_conversion:
 	// sadly, despite allocating 12 bytes, the slices can grow dynamically past it
 	// we need to trim it to the 12 MSD
@@ -99,7 +99,7 @@ func part2_FindLargestJoltage_FREQUENCY(line string) int {
 
 	for _, ch := range line {
 		d, _ := strconv.Atoi(string(ch)) // it's AOC, we assume input is good
-		digitFreq[d]++ // same here; it's a digit
+		digitFreq[d]++                   // same here; it's a digit
 	}
 
 	log.Printf("dist: %v", digitFreq)
@@ -107,7 +107,7 @@ func part2_FindLargestJoltage_FREQUENCY(line string) int {
 	digitsToCutoff := 12
 	cutoffDigit := -1
 
-	for d := 9; d >= 0; d-- {  
+	for d := 9; d >= 0; d-- {
 		count := digitFreq[d]
 
 		if count >= digitsToCutoff {
@@ -140,7 +140,7 @@ func part2_FindLargestJoltage_FREQUENCY(line string) int {
 			break
 		}
 	}
-	
+
 	log.Printf("line: %s", line)
 	log.Printf("battery: %s", result.String())
 	battery, _ := strconv.Atoi(result.String())
@@ -160,5 +160,5 @@ func day3_Solve(scanner *bufio.Scanner) (int, int) {
 		joltagePart2 += part2_FindLargestJoltage(line)
 	}
 
-	return joltagePart1, joltagePart2 
+	return joltagePart1, joltagePart2
 }

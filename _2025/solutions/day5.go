@@ -30,7 +30,7 @@ func Day5() {
 
 type IdRange struct {
 	start int
-	end int
+	end   int
 }
 
 func day5_Solve(scanner *bufio.Scanner) (int, int) {
@@ -64,8 +64,8 @@ func parseInput(scanner *bufio.Scanner) ([]IdRange, []int) {
 	for scanner.Scan() {
 		line := scanner.Text()
 		// log.Println("line: ", line)
-		if line == "" { 
-			continue 
+		if line == "" {
+			continue
 		} else if strings.Contains(line, "-") {
 			r := strings.Split(line, "-")
 			start, _ := strconv.Atoi(r[0])
@@ -84,7 +84,7 @@ func parseInput(scanner *bufio.Scanner) ([]IdRange, []int) {
 
 	// before: 134.375µs
 	// after: 107.458µs
-	slices.SortFunc(ranges, func( this IdRange, that IdRange) int {
+	slices.SortFunc(ranges, func(this IdRange, that IdRange) int {
 		return this.start - that.start
 	})
 
@@ -97,14 +97,14 @@ func reduceRanges(ranges []IdRange) []IdRange {
 	for _, r := range ranges {
 		for idx, mergedR := range mergedRanges {
 			if r.start <= mergedR.end && mergedR.start <= r.end {
-				newRange := IdRange{ start: min(r.start, mergedR.start), end: max(r.end, mergedR.end) }
+				newRange := IdRange{start: min(r.start, mergedR.start), end: max(r.end, mergedR.end)}
 				mergedRanges[idx] = newRange
 				goto skipMerge
 			}
 		}
 
 		mergedRanges = append(mergedRanges, r)
-		skipMerge:
+	skipMerge:
 	}
 
 	return mergedRanges

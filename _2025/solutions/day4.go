@@ -10,7 +10,7 @@ import (
 
 const (
 	TPRoll = '@'
-	Empty = '.'
+	Empty  = '.'
 
 	// Forklift = 'x'
 )
@@ -56,17 +56,17 @@ func scanWarehouse(warehouse [][]rune) []*Coordinates {
 }
 
 func canAccessTP(row int, col int, warehouse [][]rune) bool {
-	adjCells := []Coordinates {
-		{row - 1, col - 1}, 
-		{row, col - 1},     
-		{row + 1, col - 1}, 
+	adjCells := []Coordinates{
+		{row - 1, col - 1},
+		{row, col - 1},
+		{row + 1, col - 1},
 
-		{row - 1, col},     
-		{row + 1, col},     
+		{row - 1, col},
+		{row + 1, col},
 
-		{row - 1, col + 1}, 
-		{row, col + 1},     
-		{row + 1, col + 1}, 
+		{row - 1, col + 1},
+		{row, col + 1},
+		{row + 1, col + 1},
 	}
 
 	var count int
@@ -100,7 +100,7 @@ func day4_SolvePart2(warehouse [][]rune) int {
 	stop := utils.Timer("day4_part2")
 	defer stop()
 
-	var count int	
+	var count int
 	for {
 		tpToRemove := scanWarehouse(warehouse)
 		if len(tpToRemove) == 0 {
@@ -111,4 +111,3 @@ func day4_SolvePart2(warehouse [][]rune) int {
 		count += len(tpToRemove)
 	}
 }
-

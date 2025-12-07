@@ -9,14 +9,14 @@ import (
 )
 
 const (
-	START = 'S'
-	SPLITTER = '^'
+	START           = 'S'
+	SPLITTER        = '^'
 	SPLITTER_IN_USE = 'x'
-	NOTHING = '.'
+	NOTHING         = '.'
 )
 
 // part 1 (initial): 41.417µs
-// part 2 (initial): 41.958µs 
+// part 2 (initial): 41.958µs
 
 // part 1 (after refactor): 31.542µs -> + 23.84%
 // part 2 (after refactor): 38.5µs   -> +  8.24%
@@ -46,8 +46,8 @@ func Day7() {
 	}
 
 	// remove the last row since it's from parsing EOF and not a part of the data
-	part1 := day7_Part1(lab[:len(lab) - 1])
-	part2 := day7_Part2(lab_part2[:len(lab) - 1])
+	part1 := day7_Part1(lab[:len(lab)-1])
+	part2 := day7_Part2(lab_part2[:len(lab)-1])
 
 	log.Printf("part 1: %d\n", part1)
 	log.Printf("part 2: %d\n", part2)
@@ -59,11 +59,11 @@ func day7_Part1(lab [][]rune) int {
 
 	for jdx, ch := range lab[0] {
 		if ch == START {
-			return beam(lab, /* row */ 1, jdx)
+			return beam(lab /* row */, 1, jdx)
 		}
 	}
 
-	return -1 /* UNREACHABLE */ 
+	return -1 /* UNREACHABLE */
 }
 
 func day7_Part2(lab [][]rune) int {
@@ -71,23 +71,23 @@ func day7_Part2(lab [][]rune) int {
 	defer stop()
 
 	previousRow := make([]int, len(lab[0]))
-	for row := range lab { 
+	for row := range lab {
 		runningRow := make([]int, len(previousRow))
 		for col := range lab[0] {
 			if lab[row][col] == START {
-				runningRow[col] = 1 
+				runningRow[col] = 1
 				goto next_row // i'd rather goto than have some boolean flag
 			}
 
 			if lab[row][col] == SPLITTER {
-				runningRow[col - 1] += previousRow[col]
-				runningRow[col + 1] += previousRow[col]
+				runningRow[col-1] += previousRow[col]
+				runningRow[col+1] += previousRow[col]
 			} else {
 				runningRow[col] += previousRow[col]
 			}
 
 		}
-		next_row:
+	next_row:
 		previousRow = runningRow
 	}
 
@@ -100,11 +100,11 @@ func day7_Part2(lab [][]rune) int {
 }
 
 func beam(lab [][]rune, row int, col int) int {
-	var count int 
+	var count int
 	for {
-		if row == len(lab) - 1 || lab[row][col] == SPLITTER_IN_USE {
+		if row == len(lab)-1 || lab[row][col] == SPLITTER_IN_USE {
 			return count
-		} 
+		}
 
 		if lab[row][col] == NOTHING {
 			row++
@@ -117,11 +117,11 @@ func beam(lab [][]rune, row int, col int) int {
 
 			// if another path gets to this point, we'd like to early return
 			lab[row][col] = SPLITTER_IN_USE
-			count += beam(lab, row + 1, col - 1) + 1
-			count += beam(lab, row + 1, col + 1)
+			count += beam(lab, row+1, col-1) + 1
+			count += beam(lab, row+1, col+1)
 			break
 		}
-	}	
-		
+	}
+
 	return count
 }
